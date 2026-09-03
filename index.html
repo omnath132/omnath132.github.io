@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Projects — Circuit Portfolio</title>
+  <meta name="description" content="A showcase of projects, wired together on a living circuit board." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <!-- Fixed circuit "power rail" spine that runs down the whole page -->
+  <div class="rail" aria-hidden="true">
+    <svg class="rail-svg" preserveAspectRatio="none" viewBox="0 0 40 1000">
+      <!-- base (unpowered) trace -->
+      <path class="rail-base" d="M20 0 V1000" />
+      <!-- glowing (powered) trace, revealed by scroll -->
+      <path class="rail-glow" d="M20 0 V1000" />
+    </svg>
+  </div>
+
+  <!-- Scroll progress LED bar -->
+  <div class="progress" aria-hidden="true"><span></span></div>
+
+  <!-- ================= HERO ================= -->
+  <header class="hero" id="top">
+    <div class="hero-grid" aria-hidden="true"></div>
+    <div class="hero-inner">
+      <p class="kicker"><span class="led"></span> SYSTEM ONLINE</p>
+      <h1>Your Name</h1>
+      <p class="tagline">Engineer &amp; builder. Scroll to power up the board and see what I've made.</p>
+
+      <nav class="links" aria-label="Primary links">
+        <a class="chip-link" href="assets/resume.pdf" target="_blank" rel="noopener">
+          <span class="dot"></span> Résumé
+        </a>
+        <a class="chip-link" href="https://github.com/omnath132" target="_blank" rel="noopener">
+          <span class="dot"></span> GitHub
+        </a>
+        <a class="chip-link" href="https://www.linkedin.com/in/your-handle" target="_blank" rel="noopener">
+          <span class="dot"></span> LinkedIn
+        </a>
+      </nav>
+
+      <a class="scroll-cue" href="#projects">
+        <span>scroll to boot</span>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M6 13l6 6 6-6"/></svg>
+      </a>
+    </div>
+  </header>
+
+  <!-- ================= PROJECTS ================= -->
+  <main id="projects">
+
+    <!-- ---------- PROJECT (duplicate a block like this to add more) ---------- -->
+    <section class="project" data-side="left">
+      <div class="node" aria-hidden="true">
+        <span class="node-led"></span>
+      </div>
+      <article class="card">
+        <div class="card-media">
+          <img class="main-img" src="assets/payload-assembled.jpg"
+               alt="NASA USLI payload avionics bay: battery box, geared motor, and lead screw under the orange body tube"
+               loading="lazy" />
+        </div>
+        <!-- Thumbnail gallery: clicking a thumb swaps the main image above -->
+        <div class="gallery" role="group" aria-label="Project gallery">
+          <button class="thumb is-active" type="button">
+            <img src="assets/payload-assembled.jpg" alt="Assembled avionics bay with wiring and remove-before-flight tag" loading="lazy" />
+          </button>
+          <button class="thumb" type="button">
+            <img src="assets/payload-recovered.jpg" alt="Payload recovered in the field after a tethered nosecone separation" loading="lazy" />
+          </button>
+          <button class="thumb" type="button">
+            <img src="assets/payload-wiring.png" alt="Wiring diagram: ESP32, altimeter, conductivity probe, SD card, relay, and motor" loading="lazy" />
+          </button>
+          <button class="thumb" type="button">
+            <img src="assets/payload-board.jpg" alt="Custom protoboard with soldered sensor breakout" loading="lazy" />
+          </button>
+          <button class="thumb" type="button">
+            <img src="assets/payload-assembly.jpg" alt="Bench assembly and arming-switch wiring during integration" loading="lazy" />
+          </button>
+        </div>
+        <div class="card-body">
+          <p class="card-index">01</p>
+          <h2>NASA USLI Rocketry Payload</h2>
+          <p class="card-role">Payload &amp; Avionics · NASA University Student Launch Initiative</p>
+          <p class="card-desc">
+            Designed the complete avionics for an autonomous payload flown on a
+            high-power rocket for NASA's University Student Launch Initiative. I
+            architected a complex circuit around an ESP32 &mdash; integrating a
+            barometric altimeter, a conductivity probe, SD-card data logging, and
+            a relay-driven 12&nbsp;V gearmotor turning a lead-screw mechanism &mdash;
+            across separate flight and logic power rails with a black-powder
+            ejection charge and a remove-before-flight arming interlock.
+          </p>
+          <p class="card-desc">
+            Every subsystem was captured in formal design documentation and
+            wiring schematics submitted to NASA through the program's review
+            milestones. From there I moved into rigorous bench and field testing
+            &mdash; validating the sensor stack, deployment sequence, and recovery
+            &mdash; before competing at the USLI launch, where the payload flew,
+            logged its full mission, and was recovered intact.
+          </p>
+          <ul class="tags">
+            <li>ESP32</li><li>Altimeter</li><li>SD Logging</li><li>Relay + Gearmotor</li><li>3D Printing</li><li>High-Power Rocketry</li>
+          </ul>
+          <div class="card-links">
+            <a href="#" target="_blank" rel="noopener">Write-up ↗</a>
+            <a href="#" target="_blank" rel="noopener">Code ↗</a>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section class="project" data-side="right">
+      <div class="node" aria-hidden="true">
+        <span class="node-led"></span>
+      </div>
+      <article class="card">
+        <div class="card-media">
+          <img class="main-img" src="assets/project-2.svg" alt="Screenshot of Project Two" loading="lazy" />
+        </div>
+        <div class="card-body">
+          <p class="card-index">02</p>
+          <h2>Project Two</h2>
+          <p class="card-role">Role · Year</p>
+          <p class="card-desc">
+            Your next project goes here. Swap in the image, title, description,
+            tags, and links when you're ready.
+          </p>
+          <ul class="tags">
+            <li>Tag</li><li>Tech</li><li>Stack</li>
+          </ul>
+          <div class="card-links">
+            <a href="#" target="_blank" rel="noopener">Live ↗</a>
+            <a href="#" target="_blank" rel="noopener">Code ↗</a>
+          </div>
+        </div>
+      </article>
+    </section>
+
+  </main>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <p class="kicker"><span class="led"></span> END OF LINE</p>
+      <h2>Let's build something.</h2>
+      <nav class="links" aria-label="Footer links">
+        <a class="chip-link" href="assets/resume.pdf" target="_blank" rel="noopener"><span class="dot"></span> Résumé</a>
+        <a class="chip-link" href="https://github.com/omnath132" target="_blank" rel="noopener"><span class="dot"></span> GitHub</a>
+        <a class="chip-link" href="https://www.linkedin.com/in/your-handle" target="_blank" rel="noopener"><span class="dot"></span> LinkedIn</a>
+        <a class="chip-link" href="mailto:skaplins@andrew.cmu.edu"><span class="dot"></span> Email</a>
+      </nav>
+      <p class="copyright">© <span id="year"></span> Your Name · Built on a circuit board.</p>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

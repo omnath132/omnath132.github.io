@@ -1,0 +1,425 @@
+/* ============================================================
+   Circuit Portfolio — styles
+   Theme: dark PCB, copper traces, green power glow
+   ============================================================ */
+
+:root {
+  --bg:        #05080a;
+  --bg-2:      #0a1014;
+  --panel:     #0e161b;
+  --panel-2:   #111f26;
+  --line:      #1c2b33;
+  --copper:    #2a3b40;      /* unpowered trace */
+  --glow:      #37f5a3;      /* powered / signal green */
+  --glow-soft: #37f5a355;
+  --accent:    #4dd2ff;      /* cyan secondary */
+  --text:      #e6f0ee;
+  --muted:     #7d9490;
+  --radius:    14px;
+  --maxw:      1080px;
+  --spine:     50%;          /* horizontal position of the rail */
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(1200px 600px at 50% -10%, #0c191b 0%, transparent 60%),
+    var(--bg);
+  color: var(--text);
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2 { line-height: 1.1; letter-spacing: -0.02em; margin: 0; }
+
+.kicker {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.78rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--muted);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0 0 1.2rem;
+}
+
+/* ---------- LEDs ---------- */
+.led {
+  width: 9px; height: 9px; border-radius: 50%;
+  background: var(--glow);
+  box-shadow: 0 0 10px var(--glow), 0 0 20px var(--glow-soft);
+  animation: pulse 2.4s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.35; }
+}
+
+/* ============================================================
+   The vertical power rail (fixed behind content)
+   ============================================================ */
+.rail {
+  position: fixed;
+  top: 0; bottom: 0;
+  left: var(--spine);
+  transform: translateX(-50%);
+  width: 40px;
+  z-index: 0;
+  pointer-events: none;
+}
+.rail-svg { width: 100%; height: 100%; }
+.rail-base {
+  fill: none;
+  stroke: var(--copper);
+  stroke-width: 2;
+}
+.rail-glow {
+  fill: none;
+  stroke: var(--glow);
+  stroke-width: 2.5;
+  filter: drop-shadow(0 0 6px var(--glow));
+  /* Reveal is driven by JS via stroke-dashoffset */
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 0.1s linear;
+}
+
+/* scroll progress bar at very top */
+.progress {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: transparent;
+  z-index: 50;
+}
+.progress span {
+  display: block;
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--accent), var(--glow));
+  box-shadow: 0 0 12px var(--glow);
+  transition: width 0.1s linear;
+}
+
+/* ============================================================
+   Hero
+   ============================================================ */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: 6rem 1.5rem;
+  overflow: hidden;
+}
+.hero-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 45%, #000 0%, transparent 80%);
+  opacity: 0.5;
+}
+.hero-inner { position: relative; z-index: 2; max-width: 760px; }
+
+.hero h1 {
+  font-size: clamp(2.8rem, 9vw, 6rem);
+  font-weight: 800;
+  background: linear-gradient(180deg, #fff, #a9c7c0);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.tagline {
+  color: var(--muted);
+  font-size: clamp(1rem, 2.4vw, 1.3rem);
+  margin: 1.2rem auto 2.4rem;
+  max-width: 540px;
+}
+
+/* ---------- chip-style link buttons ---------- */
+.links {
+  display: flex;
+  gap: 0.9rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.chip-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.7rem 1.3rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: linear-gradient(180deg, var(--panel-2), var(--panel));
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: border-color 0.25s, transform 0.15s, box-shadow 0.25s;
+}
+.chip-link .dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--copper);
+  transition: background 0.25s, box-shadow 0.25s;
+}
+.chip-link:hover {
+  border-color: var(--glow);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px -8px var(--glow);
+}
+.chip-link:hover .dot {
+  background: var(--glow);
+  box-shadow: 0 0 8px var(--glow);
+}
+
+.scroll-cue {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 3.5rem;
+  color: var(--muted);
+  text-decoration: none;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+.scroll-cue svg { animation: bob 1.8s ease-in-out infinite; }
+@keyframes bob { 0%,100% { transform: translateY(0);} 50% { transform: translateY(6px);} }
+
+/* ============================================================
+   Projects on the rail
+   ============================================================ */
+main {
+  position: relative;
+  z-index: 2;
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 4rem 1.5rem 6rem;
+}
+
+.project {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 4.5rem 0;
+}
+.project[data-side="left"]  { justify-content: flex-start; }
+.project[data-side="right"] { justify-content: flex-end; }
+
+/* the node where the card taps into the rail */
+.node {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: var(--panel);
+  border: 2px solid var(--copper);
+  display: grid;
+  place-items: center;
+  z-index: 3;
+  transition: border-color 0.4s, box-shadow 0.4s;
+}
+.node-led {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--copper);
+  transition: background 0.4s, box-shadow 0.4s;
+}
+
+/* connector trace from rail to card */
+.card::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 80px;
+  height: 2px;
+  background: var(--copper);
+  transition: background 0.4s, box-shadow 0.4s;
+}
+.project[data-side="left"]  .card::before { right: -80px; }
+.project[data-side="right"] .card::before { left: -80px; }
+
+/* ---------- the card ---------- */
+.card {
+  position: relative;
+  width: min(46%, 460px);
+  background: linear-gradient(180deg, var(--panel-2), var(--panel));
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  /* start powered-down */
+  opacity: 0;
+  transform: translateY(40px);
+  filter: saturate(0.3) brightness(0.7);
+  transition: opacity 0.7s ease, transform 0.7s ease,
+              filter 0.7s ease, border-color 0.7s ease, box-shadow 0.7s ease;
+}
+.card-media { aspect-ratio: 16 / 10; background: var(--bg-2); overflow: hidden; }
+.card-media img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  transition: transform 0.5s ease;
+}
+.card:hover .card-media img { transform: scale(1.04); }
+
+/* ---------- thumbnail gallery ---------- */
+.gallery {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.7rem 0.7rem 0;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+.thumb {
+  flex: 0 0 auto;
+  width: 62px; height: 46px;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: var(--bg-2);
+  overflow: hidden;
+  cursor: pointer;
+  opacity: 0.55;
+  transition: opacity 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+.thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.thumb:hover { opacity: 0.9; border-color: var(--copper); }
+.thumb.is-active {
+  opacity: 1;
+  border-color: var(--glow);
+  box-shadow: 0 0 8px var(--glow-soft);
+}
+
+.card-body { padding: 1.5rem 1.6rem 1.7rem; }
+.card-index {
+  font-family: "JetBrains Mono", monospace;
+  color: var(--glow);
+  font-size: 0.8rem;
+  letter-spacing: 0.2em;
+  margin: 0 0 0.4rem;
+}
+.card h2 { font-size: 1.55rem; font-weight: 700; }
+.card-role {
+  font-family: "JetBrains Mono", monospace;
+  color: var(--muted);
+  font-size: 0.82rem;
+  margin: 0.3rem 0 0.9rem;
+}
+.card-desc { color: #c3d4d0; font-size: 0.97rem; margin: 0 0 1.1rem; }
+
+.tags {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0;
+  margin: 0 0 1.2rem;
+}
+.tags li {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.72rem;
+  color: var(--accent);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 0.25rem 0.6rem;
+  background: #0c171c;
+}
+.card-links { display: flex; gap: 1.2rem; }
+.card-links a {
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  border-bottom: 1px solid transparent;
+  transition: color 0.2s, border-color 0.2s;
+}
+.card-links a:hover { color: var(--glow); border-color: var(--glow); }
+
+/* ---------- POWERED-ON state (added by JS) ---------- */
+.project.powered .card {
+  opacity: 1;
+  transform: translateY(0);
+  filter: saturate(1) brightness(1);
+  border-color: #24404a;
+  box-shadow: 0 20px 60px -30px var(--glow), 0 0 0 1px #16303a inset;
+}
+.project.powered .node {
+  border-color: var(--glow);
+  box-shadow: 0 0 14px var(--glow-soft);
+}
+.project.powered .node-led {
+  background: var(--glow);
+  box-shadow: 0 0 10px var(--glow);
+}
+.project.powered .card::before {
+  background: var(--glow);
+  box-shadow: 0 0 8px var(--glow-soft);
+}
+
+/* ============================================================
+   Footer
+   ============================================================ */
+.footer {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: 6rem 1.5rem 5rem;
+  border-top: 1px solid var(--line);
+  background: linear-gradient(180deg, transparent, #060b0d);
+}
+.footer-inner { max-width: 640px; margin: 0 auto; }
+.footer h2 {
+  font-size: clamp(1.8rem, 5vw, 2.8rem);
+  margin: 0 0 2rem;
+}
+.copyright {
+  margin-top: 2.5rem;
+  color: var(--muted);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.78rem;
+}
+
+/* ============================================================
+   Responsive — stack cards, move rail to the left edge
+   ============================================================ */
+@media (max-width: 760px) {
+  :root { --spine: 26px; }
+
+  main { padding: 2rem 1.2rem 4rem; }
+
+  .project,
+  .project[data-side="left"],
+  .project[data-side="right"] {
+    justify-content: flex-start;
+    min-height: auto;
+    padding: 1.5rem 0 1.5rem 2.4rem;
+  }
+  .node { left: 26px; top: 2.6rem; transform: translate(-50%, 0); }
+
+  .card { width: 100%; }
+  .card::before,
+  .project[data-side="left"] .card::before,
+  .project[data-side="right"] .card::before {
+    left: -2.4rem; right: auto;
+    width: 2.4rem; top: 2.6rem;
+  }
+}
+
+/* respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; scroll-behavior: auto; }
+  .card { opacity: 1; transform: none; filter: none; }
+}
