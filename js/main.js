@@ -36,9 +36,10 @@ function onScroll() {
       railFill.style.height = (railProgress * 100).toFixed(2) + "%";
     }
 
-    // a project (and its dot) powers on once the wave has reached its node
+    // a project (and its dot) powers on once the wave reaches the dot's position
     projects.forEach((p) => {
-      const nodeY = mainTop + p.offsetTop + p.offsetHeight / 2;
+      const node = p.querySelector(".node");
+      const nodeY = mainTop + p.offsetTop + (node ? node.offsetTop : p.offsetHeight / 2);
       p.classList.toggle("powered", waveY >= nodeY);
     });
   }
@@ -59,20 +60,9 @@ window.addEventListener(
 // run once on load
 onScroll();
 
-// wide graphics (the wiring diagram) should show in full, not cropped
-function isWideGraphic(src) {
-  return /payload-wiring/.test(src || "");
-}
-function fitMedia(media) {
-  const img = media.querySelector(".main-img");
-  media.classList.toggle("contain", isWideGraphic(img.getAttribute("src")));
-}
-document.querySelectorAll(".card-media").forEach(fitMedia);
-
 // ---- Thumbnail galleries: click a thumb to swap the main image ----
 document.querySelectorAll(".gallery").forEach((gallery) => {
   const card = gallery.closest(".card");
-  const media = card.querySelector(".card-media");
   const mainImg = card.querySelector(".main-img");
   const thumbs = gallery.querySelectorAll(".thumb");
 
@@ -81,7 +71,6 @@ document.querySelectorAll(".gallery").forEach((gallery) => {
       const img = thumb.querySelector("img");
       mainImg.src = img.src;
       mainImg.alt = img.alt;
-      fitMedia(media);
       thumbs.forEach((t) => t.classList.remove("is-active"));
       thumb.classList.add("is-active");
     });

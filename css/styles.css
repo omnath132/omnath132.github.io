@@ -220,7 +220,7 @@ main {
 .node {
   position: absolute;
   left: 30px;
-  top: 50%;
+  top: calc(3.5rem + 2.2rem);   /* near the top of the card (project padding + offset) */
   transform: translate(-50%, -50%);
   width: 20px; height: 20px;
   border-radius: 50%;
@@ -299,11 +299,11 @@ main {
 /* electrons march source → drain; dash pattern is 5+11 = 16px, so loop one full pattern */
 @keyframes current-flow { from { stroke-dashoffset: 0; } to { stroke-dashoffset: -16; } }
 
-/* connector trace from the rail to the card (in the left gutter) */
+/* connector trace from the rail to the card (in the left gutter), aligned with the dot */
 .card::before {
   content: "";
   position: absolute;
-  top: 50%;
+  top: 2.2rem;
   left: -2.6rem;
   width: 2.6rem;
   height: 2px;
@@ -326,18 +326,25 @@ main {
   transition: opacity 0.5s ease, filter 0.5s ease,
               border-color 0.5s ease, box-shadow 0.5s ease;
 }
-.card-media { aspect-ratio: 16 / 10; background: var(--bg-2); overflow: hidden; }
+/* full photo always visible (never cropped) — box is tall enough for portrait shots,
+   image is scaled down to fit within it */
+.card-media {
+  aspect-ratio: 4 / 3;
+  max-height: 62vh;
+  background: #060b0d;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: zoom-in;
+}
 .card-media img {
-  width: 100%; height: 100%; object-fit: cover; display: block;
+  width: 100%; height: 100%; object-fit: contain; display: block;
   transition: transform 0.5s ease;
 }
-.card:hover .card-media img { transform: scale(1.04); }
-.card-media { cursor: zoom-in; }
-/* wiring diagram (and any wide graphic) shows in full, not cropped */
-.card-media.contain { background: #060b0d; }
-.card-media.contain img { object-fit: contain; }
+.card:hover .card-media img { transform: scale(1.02); }
 
-/* ---------- lightbox (click a photo → full size, scrollable) ---------- */
+/* ---------- lightbox (click a photo → whole image fit to screen) ---------- */
 .lightbox {
   position: fixed; inset: 0; z-index: 100;
   display: flex; align-items: center; justify-content: center;
@@ -347,11 +354,17 @@ main {
 .lightbox[hidden] { display: none; }
 .lb-scroll {
   max-width: 96vw; max-height: 92vh;
-  overflow: auto;
+  overflow: auto;                 /* safety net only; the image is sized to always fit */
+  display: flex; align-items: center; justify-content: center;
   border-radius: 10px;
   box-shadow: 0 30px 80px -20px #000;
 }
-.lb-img { display: block; max-width: none; }   /* natural size; scroll if bigger than screen */
+.lb-img {
+  display: block;
+  max-width: 96vw; max-height: 92vh;   /* whole photo always visible, no scrolling needed */
+  width: auto; height: auto;
+  object-fit: contain;
+}
 .lb-close, .lb-nav {
   position: fixed;
   background: rgba(14, 22, 27, 0.85);
@@ -488,8 +501,8 @@ main {
   main { padding: 2rem 1.1rem 4rem; }
 
   .project { padding: 1.8rem 0 1.8rem 3.4rem; }
-  .node { left: 22px; }
-  .card::before { left: -1.7rem; width: 1.7rem; }
+  .node { left: 22px; top: calc(1.8rem + 2.2rem); }
+  .card::before { left: -1.7rem; width: 1.7rem; top: 2.2rem; }
 }
 
 /* respect reduced motion */
