@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/styles.css?v=8" />
+  <link rel="stylesheet" href="css/styles.css?v=10" />
 </head>
 <body>
   <!-- PCB-style background: fine grid + via dots, fixed behind all content -->
@@ -113,22 +113,24 @@
       <div class="node" aria-hidden="true"><span class="node-led"></span></div>
       <article class="card">
         <div class="card-media">
-          <img class="main-img" src="assets/project-2.svg" alt="Screenshot of Project Two" loading="lazy" />
+          <img class="main-img" src="assets/project-2.svg" alt="Placeholder graphic — Interactive Wearable Costume, work in progress" loading="lazy" />
         </div>
         <div class="card-body">
           <p class="card-index">02</p>
-          <h2>Project Two</h2>
-          <p class="card-role">Role · Year</p>
+          <h2>Interactive Wearable Costume</h2>
+          <p class="card-role">Personal Project · Jan 2026&ndash;Present (in progress)</p>
           <p class="card-desc">
-            Your next project goes here. Swap in the image, title, description,
-            tags, and links when you're ready.
+            A hand-wired, hand-soldered wearable that reacts to the body in real
+            time. I'm designing a full sensor-to-actuator signal chain &mdash;
+            mapping heart rate, gyroscope, and capacitive touch input into live
+            control signals for addressable LED drivers &mdash; and writing the
+            firmware that turns raw sensor data into responsive light.
           </p>
           <ul class="tags">
-            <li>Tag</li><li>Tech</li><li>Stack</li>
+            <li>Addressable LEDs</li><li>Sensor Fusion</li><li>Capacitive Touch</li><li>Firmware</li><li>Hand-Soldered</li>
           </ul>
           <div class="card-links">
-            <a href="#" target="_blank" rel="noopener">Live ↗</a>
-            <a href="#" target="_blank" rel="noopener">Code ↗</a>
+            <a href="https://github.com/omnath132/interactive-wearable-costume" target="_blank" rel="noopener">Code ↗</a>
           </div>
         </div>
       </article>
@@ -144,7 +146,7 @@
         <a class="chip-link" href="assets/resume.pdf" target="_blank" rel="noopener"><span class="dot"></span> Résumé</a>
         <a class="chip-link" href="https://github.com/omnath132" target="_blank" rel="noopener"><span class="dot"></span> GitHub</a>
         <a class="chip-link" href="https://www.linkedin.com/in/simon-kaplinsky/" target="_blank" rel="noopener"><span class="dot"></span> LinkedIn</a>
-        <a class="chip-link" href="mailto:skaplins@andrew.cmu.edu"><span class="dot"></span> Email</a>
+        <button class="chip-link" id="contact-btn" type="button"><span class="dot"></span> Contact</button>
       </nav>
       <p class="copyright">© <span id="year"></span> Simon Kaplinsky</p>
     </div>
@@ -158,6 +160,39 @@
     <div class="lb-scroll"><img class="lb-img" alt="" /></div>
   </div>
 
-  <script src="js/main.js?v=4"></script>
+  <!-- contact modal: copy email, or compose a message that opens your mail app -->
+  <div class="contact-modal" id="contact-modal" hidden>
+    <div class="cm-panel">
+      <button class="cm-close" aria-label="Close (Esc)">✕</button>
+      <p class="kicker"><span class="led"></span> CONTACT</p>
+      <h3>Get in touch</h3>
+
+      <div class="cm-email-row">
+        <code id="cm-email">skaplins@andrew.cmu.edu</code>
+        <button class="cm-copy" type="button">Copy</button>
+      </div>
+
+      <p class="cm-divider"><span>or send a message</span></p>
+
+      <form id="cm-form">
+        <label class="cm-field">
+          <span>Your name</span>
+          <input type="text" name="name" autocomplete="name" />
+        </label>
+        <label class="cm-field">
+          <span>Your email</span>
+          <input type="email" name="replyTo" autocomplete="email" required />
+        </label>
+        <label class="cm-field">
+          <span>Message</span>
+          <textarea name="message" rows="4" required></textarea>
+        </label>
+        <button class="cm-submit" type="submit">Open in email app ↗</button>
+        <p class="cm-note">This drafts the message in your own email app — nothing is sent from this site.</p>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/main.js?v=5"></script>
 </body>
 </html>

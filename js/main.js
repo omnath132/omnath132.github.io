@@ -135,3 +135,73 @@ document.addEventListener("keydown", (e) => {
   else if (e.key === "ArrowLeft") showLb(lbIndex - 1);
   else if (e.key === "ArrowRight") showLb(lbIndex + 1);
 });
+
+// ---- Contact modal: copy email, or compose a message that opens the visitor's mail app ----
+const contactBtn = document.getElementById("contact-btn");
+const cm = document.getElementById("contact-modal");
+const cmEmail = document.getElementById("cm-email");
+const cmCopy = document.querySelector(".cm-copy");
+const cmForm = document.getElementById("cm-form");
+const TARGET_EMAIL = "skaplins@andrew.cmu.edu";
+
+function openContact() {
+  cm.hidden = false;
+  document.body.style.overflow = "hidden";
+}
+function closeContact() {
+  cm.hidden = true;
+  document.body.style.overflow = "";
+}
+
+if (contactBtn) contactBtn.addEventListener("click", openContact);
+if (cm) {
+  cm.querySelector(".cm-close").addEventListener("click", closeContact);
+  cm.addEventListener("click", (e) => {
+    if (e.target === cm) closeContact();
+  });
+  document.addEventListener("keydown", (e) => {
+    if (!cm.hidden && e.key === "Escape") closeContact();
+  });
+}
+
+if (cmCopy) {
+  cmCopy.addEventListener("click", async () => {
+    try {
+      await navigator.clipboard.writeText(TARGET_EMAIL);
+    } catch {
+      // clipboard API unavailable (older browser / non-HTTPS) — fall back to a manual select
+      const range = document.createRange();
+      range.selectNodeContents(cmEmail);
+      const sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+    }
+    const original = cmCopy.textContent;
+    cmCopy.textContent = "Copied!";
+    cmCopy.classList.add("is-copied");
+    setTimeout(() => {
+      cmCopy.textContent = original;
+      cmCopy.classList.remove("is-copied");
+    }, 1800);
+  });
+}
+
+if (cmForm) {
+  cmForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const data = new FormData(cmForm);
+    const name = (data.get("name") || "").toString().trim();
+    const replyTo = (data.get("replyTo") || "").toString().trim();
+    const message = (data.get("message") || "").toString().trim();
+
+    const subject = `Portfolio contact${name ? " from " + name : ""}`;
+    const bodyLines = [message, "", `— ${name || "(no name given)"}`, replyTo];
+    const body = bodyLines.join("\n");
+
+    const mailto =
+      `mailto:${TARGET_EMAIL}` +
+      `?subject=${encodeURIComponent(subject)}` +
+      `&body=${encodeURIComponent(body)}`;
+    window.location.href = mailto;
+  });
+}
