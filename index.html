@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/styles.css?v=10" />
+  <link rel="stylesheet" href="css/styles.css?v=11" />
 </head>
 <body>
   <!-- PCB-style background: fine grid + via dots, fixed behind all content -->
@@ -112,8 +112,38 @@
     <section class="project" data-side="right">
       <div class="node" aria-hidden="true"><span class="node-led"></span></div>
       <article class="card">
+        <div class="card-video">
+          <video controls playsinline preload="none" poster="assets/costume-led-green.jpg">
+            <source src="assets/costume-glow.mp4" type="video/mp4" />
+          </video>
+        </div>
         <div class="card-media">
-          <img class="main-img" src="assets/project-2.svg" alt="Placeholder graphic — Interactive Wearable Costume, work in progress" loading="lazy" />
+          <img class="main-img" src="assets/costume-fiber-blue.jpg"
+               alt="Fiber-optic strands glowing blue, gathered by hand for the costume's light diffusion"
+               loading="lazy" />
+        </div>
+        <div class="gallery" role="group" aria-label="Project gallery">
+          <button class="thumb is-active" type="button">
+            <img src="assets/costume-fiber-blue.jpg" alt="Fiber-optic strands glowing blue, gathered by hand" loading="lazy" />
+          </button>
+          <button class="thumb" type="button">
+            <img src="assets/costume-led-green.jpg" alt="Addressable LED strip glowing green, feeding a fiber-optic strand" loading="lazy" />
+          </button>
+          <button class="thumb" type="button">
+            <img src="assets/costume-workbench.jpg" alt="Build workbench: breadboard, soldering station, and dev tools" loading="lazy" />
+          </button>
+          <button class="thumb" type="button">
+            <img src="assets/costume-sensor-boards.jpg" alt="MPU6050 and MAX30102 sensor breakout boards wired for the costume" loading="lazy" />
+          </button>
+          <button class="thumb" type="button">
+            <img src="assets/costume-protoboard.jpg" alt="Hand-soldered protoboard for the sensor-to-LED signal chain" loading="lazy" />
+          </button>
+          <button class="thumb" type="button">
+            <img src="assets/costume-connector.jpg" alt="4-pin JST connector wired for a sensor module" loading="lazy" />
+          </button>
+          <button class="thumb" type="button">
+            <img src="assets/costume-sleeving.jpg" alt="Wiring harness finished with braided split-sleeving" loading="lazy" />
+          </button>
         </div>
         <div class="card-body">
           <p class="card-index">02</p>
