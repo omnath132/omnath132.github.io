@@ -36,6 +36,24 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* ============================================================
+   PCB background — fine grid + via dots, fixed behind everything
+   ============================================================ */
+.pcb-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.5;
+  background-image:
+    /* fine copper grid */
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px),
+    /* via dots at every other intersection */
+    radial-gradient(circle, var(--copper) 1px, transparent 1.4px);
+  background-size: 46px 46px, 46px 46px, 92px 92px;
+}
+
 h1, h2 { line-height: 1.1; letter-spacing: -0.02em; margin: 0; }
 
 .kicker {
@@ -231,6 +249,16 @@ main {
   z-index: 3;
   transition: border-color 0.5s ease, box-shadow 0.5s ease;
 }
+/* clearance ring around the pad, like a via's thermal relief on a PCB */
+.node::before {
+  content: "";
+  position: absolute;
+  inset: -7px;
+  border-radius: 50%;
+  border: 1px dashed var(--copper);
+  opacity: 0.45;
+  transition: border-color 0.5s ease, opacity 0.5s ease;
+}
 .node-led {
   width: 8px; height: 8px;
   border-radius: 50%;
@@ -241,74 +269,40 @@ main {
   border-color: var(--glow);
   box-shadow: 0 0 14px var(--glow-soft);
 }
+.project.powered .node::before {
+  border-color: var(--glow);
+  opacity: 0.85;
+}
 .project.powered .node-led {
   background: var(--glow);
   box-shadow: 0 0 10px var(--glow);
 }
 
-/* base (unpowered) = copper */
-.t-wire, .t-finger, .t-plate, .t-lead, .t-channel, .t-current {
-  fill: none;
-  stroke: var(--copper);
-  stroke-width: 2.5;
-  stroke-linecap: round;
-  transition: stroke 0.5s ease, filter 0.5s ease;
-}
-.t-plate { stroke-width: 4; }
-.t-arrow { fill: var(--copper); transition: fill 0.5s ease, filter 0.5s ease; }
-/* overlays stay hidden until the transistor conducts */
-.t-channel { stroke: var(--glow); stroke-width: 3; opacity: 0; }
-.t-current { stroke: var(--glow); opacity: 0; }
-
-/* ---- powered END-STATES (also what reduced-motion / unsupported browsers show) ---- */
-.project.powered .t-wire,
-.project.powered .t-finger { stroke: var(--glow); filter: drop-shadow(0 0 5px var(--glow)); }
-.project.powered .t-arrow  { fill: var(--glow); filter: drop-shadow(0 0 4px var(--glow)); }
-.project.powered .t-plate,
-.project.powered .t-lead   { stroke: var(--accent); filter: drop-shadow(0 0 7px var(--accent)); }
-.project.powered .t-channel { opacity: 1; stroke-width: 6; filter: drop-shadow(0 0 6px var(--glow)); }
-.project.powered .t-current { opacity: 1; stroke-dasharray: 5 11; }
-
-/* ---- power-up choreography: Vgs↑ (gate) → channel forms → current flows ---- */
-.project.powered .t-plate,
-.project.powered .t-lead    { animation: gate-charge 0.5s ease; }
-.project.powered .t-channel { animation: channel-form 0.45s ease 0.3s backwards; }
-.project.powered .t-wire,
-.project.powered .t-finger,
-.project.powered .t-arrow   { animation: conduct 0.4s ease 0.5s backwards; }
-.project.powered .t-current {
-  animation: current-reveal 0.01s linear 0.6s backwards,
-             current-flow 0.85s linear 0.6s infinite;
-}
-
-@keyframes gate-charge {
-  0%   { stroke: var(--copper); filter: drop-shadow(0 0 0 transparent); }
-  55%  { stroke: #cffdf0; filter: drop-shadow(0 0 11px var(--accent)); }
-  100% { stroke: var(--accent); filter: drop-shadow(0 0 7px var(--accent)); }
-}
-@keyframes channel-form {
-  0%   { opacity: 0; stroke-width: 1; filter: drop-shadow(0 0 0 transparent); }
-  60%  { opacity: 1; stroke-width: 8; filter: drop-shadow(0 0 9px var(--glow)); }
-  100% { opacity: 1; stroke-width: 6; filter: drop-shadow(0 0 6px var(--glow)); }
-}
-@keyframes conduct {
-  0%   { stroke: var(--copper); }
-  100% { stroke: var(--glow); }
-}
-@keyframes current-reveal { from { opacity: 0; } to { opacity: 1; } }
-/* electrons march source → drain; dash pattern is 5+11 = 16px, so loop one full pattern */
-@keyframes current-flow { from { stroke-dashoffset: 0; } to { stroke-dashoffset: -16; } }
-
-/* connector trace from the rail to the card (in the left gutter), aligned with the dot */
-.card::before {
+/* connector trace: node → card edge. Lives on .project (not .card — .card has
+   overflow:hidden, which would clip anything positioned outside its own box). */
+.project::before {
   content: "";
   position: absolute;
-  top: 2.2rem;
-  left: -2.6rem;
-  width: 2.6rem;
+  top: calc(3.5rem + 2.2rem);
+  left: 30px;
+  width: calc(5rem - 30px);
   height: 2px;
   background: var(--copper);
   transition: background 0.4s, box-shadow 0.4s;
+}
+/* pin pad where the trace lands on the card, like a component pin soldered to a pad */
+.project::after {
+  content: "";
+  position: absolute;
+  top: calc(3.5rem + 2.2rem);
+  left: 5rem;
+  width: 9px; height: 9px;
+  transform: translate(-50%, -50%);
+  border-radius: 2px;
+  background: var(--panel);
+  border: 2px solid var(--copper);
+  z-index: 2;
+  transition: background 0.4s, border-color 0.4s, box-shadow 0.4s;
 }
 
 /* ---------- the card ---------- */
@@ -455,10 +449,14 @@ main {
 }
 .card-links a:hover { color: var(--glow); border-color: var(--glow); }
 
-/* ---------- POWERED-ON state (added by JS) ----------
-   Cascade follows the transistor: gate drive (branch) → then the card powers up. */
-.project.powered .card::before {
+/* ---------- POWERED-ON state (added by JS) ---------- */
+.project.powered::before {
   background: var(--glow);
+  box-shadow: 0 0 8px var(--glow-soft);
+}
+.project.powered::after {
+  background: var(--glow);
+  border-color: var(--glow);
   box-shadow: 0 0 8px var(--glow-soft);
 }
 .project.powered .card {
@@ -502,7 +500,8 @@ main {
 
   .project { padding: 1.8rem 0 1.8rem 3.4rem; }
   .node { left: 22px; top: calc(1.8rem + 2.2rem); }
-  .card::before { left: -1.7rem; width: 1.7rem; top: 2.2rem; }
+  .project::before { left: 22px; width: calc(3.4rem - 22px); top: calc(1.8rem + 2.2rem); }
+  .project::after  { left: 3.4rem; top: calc(1.8rem + 2.2rem); }
 }
 
 /* respect reduced motion */
