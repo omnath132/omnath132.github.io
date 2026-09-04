@@ -17,7 +17,7 @@
   --muted:     #7d9490;
   --radius:    14px;
   --maxw:      1080px;
-  --spine:     50%;          /* horizontal position of the rail */
+  --spine:     calc(1.5rem + 30px);   /* rail x = main's left padding + node offset */
 }
 
 * { box-sizing: border-box; }
@@ -63,32 +63,30 @@ h1, h2 { line-height: 1.1; letter-spacing: -0.02em; margin: 0; }
 }
 
 /* ============================================================
-   The vertical power rail (fixed behind content)
+   The vertical power rail — lives inside <main>, so it spans
+   only the projects and never crosses the hero or footer text.
    ============================================================ */
-.rail {
-  position: fixed;
+.rail-line {
+  position: absolute;
   top: 0; bottom: 0;
   left: var(--spine);
-  transform: translateX(-50%);
-  width: 40px;
+  width: 2px;
+  transform: translateX(-1px);
+  background: var(--copper);
+  border-radius: 2px;
   z-index: 0;
   pointer-events: none;
 }
-.rail-svg { width: 100%; height: 100%; }
-.rail-base {
-  fill: none;
-  stroke: var(--copper);
-  stroke-width: 2;
-}
-.rail-glow {
-  fill: none;
-  stroke: var(--glow);
-  stroke-width: 2.5;
-  filter: drop-shadow(0 0 6px var(--glow));
-  /* Reveal is driven by JS via stroke-dashoffset */
-  stroke-dasharray: 1;
-  stroke-dashoffset: 1;
-  transition: stroke-dashoffset 0.1s linear;
+/* the glow fills downward as you scroll through the projects (JS sets height) */
+.rail-fill {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 0%;
+  background: linear-gradient(180deg, var(--accent), var(--glow));
+  box-shadow: 0 0 8px var(--glow), 0 0 16px var(--glow-soft);
+  border-radius: 2px;
+  transition: height 0.12s linear;
 }
 
 /* scroll progress bar at very top */
@@ -210,63 +208,123 @@ main {
   padding: 4rem 1.5rem 6rem;
 }
 
+/* rail is always on the left; each project card fills the space to its right */
 .project {
   position: relative;
   display: flex;
   align-items: center;
-  padding: 4.5rem 0;
+  padding: 3.5rem 0 3.5rem 5rem;
 }
-.project[data-side="left"]  { justify-content: flex-start; }
-.project[data-side="right"] { justify-content: flex-end; }
 
-/* the node where the card taps into the rail */
+/* a node dot sits on the left rail at each project and lights up when it powers on */
 .node {
   position: absolute;
-  left: 50%;
+  left: 30px;
   top: 50%;
   transform: translate(-50%, -50%);
-  width: 22px; height: 22px;
+  width: 20px; height: 20px;
   border-radius: 50%;
   background: var(--panel);
   border: 2px solid var(--copper);
   display: grid;
   place-items: center;
   z-index: 3;
-  transition: border-color 0.4s, box-shadow 0.4s;
+  transition: border-color 0.5s ease, box-shadow 0.5s ease;
 }
 .node-led {
-  width: 8px; height: 8px; border-radius: 50%;
+  width: 8px; height: 8px;
+  border-radius: 50%;
   background: var(--copper);
-  transition: background 0.4s, box-shadow 0.4s;
+  transition: background 0.5s ease, box-shadow 0.5s ease;
+}
+.project.powered .node {
+  border-color: var(--glow);
+  box-shadow: 0 0 14px var(--glow-soft);
+}
+.project.powered .node-led {
+  background: var(--glow);
+  box-shadow: 0 0 10px var(--glow);
 }
 
-/* connector trace from rail to card */
+/* base (unpowered) = copper */
+.t-wire, .t-finger, .t-plate, .t-lead, .t-channel, .t-current {
+  fill: none;
+  stroke: var(--copper);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  transition: stroke 0.5s ease, filter 0.5s ease;
+}
+.t-plate { stroke-width: 4; }
+.t-arrow { fill: var(--copper); transition: fill 0.5s ease, filter 0.5s ease; }
+/* overlays stay hidden until the transistor conducts */
+.t-channel { stroke: var(--glow); stroke-width: 3; opacity: 0; }
+.t-current { stroke: var(--glow); opacity: 0; }
+
+/* ---- powered END-STATES (also what reduced-motion / unsupported browsers show) ---- */
+.project.powered .t-wire,
+.project.powered .t-finger { stroke: var(--glow); filter: drop-shadow(0 0 5px var(--glow)); }
+.project.powered .t-arrow  { fill: var(--glow); filter: drop-shadow(0 0 4px var(--glow)); }
+.project.powered .t-plate,
+.project.powered .t-lead   { stroke: var(--accent); filter: drop-shadow(0 0 7px var(--accent)); }
+.project.powered .t-channel { opacity: 1; stroke-width: 6; filter: drop-shadow(0 0 6px var(--glow)); }
+.project.powered .t-current { opacity: 1; stroke-dasharray: 5 11; }
+
+/* ---- power-up choreography: Vgs↑ (gate) → channel forms → current flows ---- */
+.project.powered .t-plate,
+.project.powered .t-lead    { animation: gate-charge 0.5s ease; }
+.project.powered .t-channel { animation: channel-form 0.45s ease 0.3s backwards; }
+.project.powered .t-wire,
+.project.powered .t-finger,
+.project.powered .t-arrow   { animation: conduct 0.4s ease 0.5s backwards; }
+.project.powered .t-current {
+  animation: current-reveal 0.01s linear 0.6s backwards,
+             current-flow 0.85s linear 0.6s infinite;
+}
+
+@keyframes gate-charge {
+  0%   { stroke: var(--copper); filter: drop-shadow(0 0 0 transparent); }
+  55%  { stroke: #cffdf0; filter: drop-shadow(0 0 11px var(--accent)); }
+  100% { stroke: var(--accent); filter: drop-shadow(0 0 7px var(--accent)); }
+}
+@keyframes channel-form {
+  0%   { opacity: 0; stroke-width: 1; filter: drop-shadow(0 0 0 transparent); }
+  60%  { opacity: 1; stroke-width: 8; filter: drop-shadow(0 0 9px var(--glow)); }
+  100% { opacity: 1; stroke-width: 6; filter: drop-shadow(0 0 6px var(--glow)); }
+}
+@keyframes conduct {
+  0%   { stroke: var(--copper); }
+  100% { stroke: var(--glow); }
+}
+@keyframes current-reveal { from { opacity: 0; } to { opacity: 1; } }
+/* electrons march source → drain; dash pattern is 5+11 = 16px, so loop one full pattern */
+@keyframes current-flow { from { stroke-dashoffset: 0; } to { stroke-dashoffset: -16; } }
+
+/* connector trace from the rail to the card (in the left gutter) */
 .card::before {
   content: "";
   position: absolute;
   top: 50%;
-  width: 80px;
+  left: -2.6rem;
+  width: 2.6rem;
   height: 2px;
   background: var(--copper);
   transition: background 0.4s, box-shadow 0.4s;
 }
-.project[data-side="left"]  .card::before { right: -80px; }
-.project[data-side="right"] .card::before { left: -80px; }
 
 /* ---------- the card ---------- */
 .card {
   position: relative;
-  width: min(46%, 460px);
+  width: 100%;
+  max-width: 760px;
   background: linear-gradient(180deg, var(--panel-2), var(--panel));
   border: 1px solid var(--line);
   border-radius: var(--radius);
   overflow: hidden;
-  /* start powered-down */
-  opacity: 0;
-  transform: translateY(40px);
-  filter: saturate(0.3) brightness(0.7);
-  transition: opacity 0.7s ease, transform 0.7s ease,
-              filter 0.7s ease, border-color 0.7s ease, box-shadow 0.7s ease;
+  /* dimmed when not the active project (not hidden), so scrolling reads as on/off */
+  opacity: 0.55;
+  filter: saturate(0.35) brightness(0.72);
+  transition: opacity 0.5s ease, filter 0.5s ease,
+              border-color 0.5s ease, box-shadow 0.5s ease;
 }
 .card-media { aspect-ratio: 16 / 10; background: var(--bg-2); overflow: hidden; }
 .card-media img {
@@ -274,6 +332,42 @@ main {
   transition: transform 0.5s ease;
 }
 .card:hover .card-media img { transform: scale(1.04); }
+.card-media { cursor: zoom-in; }
+/* wiring diagram (and any wide graphic) shows in full, not cropped */
+.card-media.contain { background: #060b0d; }
+.card-media.contain img { object-fit: contain; }
+
+/* ---------- lightbox (click a photo → full size, scrollable) ---------- */
+.lightbox {
+  position: fixed; inset: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(3, 6, 8, 0.95);
+  -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);
+}
+.lightbox[hidden] { display: none; }
+.lb-scroll {
+  max-width: 96vw; max-height: 92vh;
+  overflow: auto;
+  border-radius: 10px;
+  box-shadow: 0 30px 80px -20px #000;
+}
+.lb-img { display: block; max-width: none; }   /* natural size; scroll if bigger than screen */
+.lb-close, .lb-nav {
+  position: fixed;
+  background: rgba(14, 22, 27, 0.85);
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: "JetBrains Mono", monospace;
+  line-height: 1;
+  transition: border-color 0.2s, color 0.2s;
+}
+.lb-close { top: 1rem; right: 1rem; width: 42px; height: 42px; font-size: 1.05rem; }
+.lb-nav { top: 50%; transform: translateY(-50%); width: 46px; height: 64px; font-size: 1.7rem; }
+.lb-prev { left: 1rem; }
+.lb-next { right: 1rem; }
+.lb-close:hover, .lb-nav:hover { border-color: var(--glow); color: var(--glow); }
 
 /* ---------- thumbnail gallery ---------- */
 .gallery {
@@ -348,25 +442,18 @@ main {
 }
 .card-links a:hover { color: var(--glow); border-color: var(--glow); }
 
-/* ---------- POWERED-ON state (added by JS) ---------- */
+/* ---------- POWERED-ON state (added by JS) ----------
+   Cascade follows the transistor: gate drive (branch) → then the card powers up. */
+.project.powered .card::before {
+  background: var(--glow);
+  box-shadow: 0 0 8px var(--glow-soft);
+}
 .project.powered .card {
   opacity: 1;
   transform: translateY(0);
   filter: saturate(1) brightness(1);
   border-color: #24404a;
   box-shadow: 0 20px 60px -30px var(--glow), 0 0 0 1px #16303a inset;
-}
-.project.powered .node {
-  border-color: var(--glow);
-  box-shadow: 0 0 14px var(--glow-soft);
-}
-.project.powered .node-led {
-  background: var(--glow);
-  box-shadow: 0 0 10px var(--glow);
-}
-.project.powered .card::before {
-  background: var(--glow);
-  box-shadow: 0 0 8px var(--glow-soft);
 }
 
 /* ============================================================
@@ -396,26 +483,13 @@ main {
    Responsive — stack cards, move rail to the left edge
    ============================================================ */
 @media (max-width: 760px) {
-  :root { --spine: 26px; }
+  :root { --spine: calc(1.1rem + 22px); }
 
-  main { padding: 2rem 1.2rem 4rem; }
+  main { padding: 2rem 1.1rem 4rem; }
 
-  .project,
-  .project[data-side="left"],
-  .project[data-side="right"] {
-    justify-content: flex-start;
-    min-height: auto;
-    padding: 1.5rem 0 1.5rem 2.4rem;
-  }
-  .node { left: 26px; top: 2.6rem; transform: translate(-50%, 0); }
-
-  .card { width: 100%; }
-  .card::before,
-  .project[data-side="left"] .card::before,
-  .project[data-side="right"] .card::before {
-    left: -2.4rem; right: auto;
-    width: 2.4rem; top: 2.6rem;
-  }
+  .project { padding: 1.8rem 0 1.8rem 3.4rem; }
+  .node { left: 22px; }
+  .card::before { left: -1.7rem; width: 1.7rem; }
 }
 
 /* respect reduced motion */

@@ -3,24 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Projects — Circuit Portfolio</title>
-  <meta name="description" content="A showcase of projects, wired together on a living circuit board." />
+  <title>Simon Kaplinsky — Projects</title>
+  <meta name="description" content="Simon Kaplinsky — ECE @ Carnegie Mellon. Hardware, PCB, and embedded projects on a living circuit board." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
-  <!-- Fixed circuit "power rail" spine that runs down the whole page -->
-  <div class="rail" aria-hidden="true">
-    <svg class="rail-svg" preserveAspectRatio="none" viewBox="0 0 40 1000">
-      <!-- base (unpowered) trace -->
-      <path class="rail-base" d="M20 0 V1000" />
-      <!-- glowing (powered) trace, revealed by scroll -->
-      <path class="rail-glow" d="M20 0 V1000" />
-    </svg>
-  </div>
-
   <!-- Scroll progress LED bar -->
   <div class="progress" aria-hidden="true"><span></span></div>
 
@@ -29,8 +19,8 @@
     <div class="hero-grid" aria-hidden="true"></div>
     <div class="hero-inner">
       <p class="kicker"><span class="led"></span> SYSTEM ONLINE</p>
-      <h1>Your Name</h1>
-      <p class="tagline">Engineer &amp; builder. Scroll to power up the board and see what I've made.</p>
+      <h1>Simon Kaplinsky</h1>
+      <p class="tagline">ECE @ Carnegie Mellon — I design and debug hardware, from PCBs to embedded firmware. Scroll to power up the board.</p>
 
       <nav class="links" aria-label="Primary links">
         <a class="chip-link" href="assets/resume.pdf" target="_blank" rel="noopener">
@@ -39,7 +29,7 @@
         <a class="chip-link" href="https://github.com/omnath132" target="_blank" rel="noopener">
           <span class="dot"></span> GitHub
         </a>
-        <a class="chip-link" href="https://www.linkedin.com/in/your-handle" target="_blank" rel="noopener">
+        <a class="chip-link" href="https://www.linkedin.com/in/simon-kaplinsky/" target="_blank" rel="noopener">
           <span class="dot"></span> LinkedIn
         </a>
       </nav>
@@ -54,11 +44,12 @@
   <!-- ================= PROJECTS ================= -->
   <main id="projects">
 
+    <!-- power rail: spans only the projects, so it never crosses the hero or footer text -->
+    <div class="rail-line" aria-hidden="true"><span class="rail-fill"></span></div>
+
     <!-- ---------- PROJECT (duplicate a block like this to add more) ---------- -->
     <section class="project" data-side="left">
-      <div class="node" aria-hidden="true">
-        <span class="node-led"></span>
-      </div>
+      <div class="node" aria-hidden="true"><span class="node-led"></span></div>
       <article class="card">
         <div class="card-media">
           <img class="main-img" src="assets/payload-assembled.jpg"
@@ -85,40 +76,38 @@
         </div>
         <div class="card-body">
           <p class="card-index">01</p>
-          <h2>NASA USLI Rocketry Payload</h2>
-          <p class="card-role">Payload &amp; Avionics · NASA University Student Launch Initiative</p>
+          <h2>Autonomous Soil-Sampling Payload</h2>
+          <p class="card-role">Electrical Team · CMU Rocket Command · NASA USLI 2025&ndash;26 (Project CANTALOUPE)</p>
           <p class="card-desc">
-            Designed the complete avionics for an autonomous payload flown on a
-            high-power rocket for NASA's University Student Launch Initiative. I
-            architected a complex circuit around an ESP32 &mdash; integrating a
-            barometric altimeter, a conductivity probe, SD-card data logging, and
-            a relay-driven 12&nbsp;V gearmotor turning a lead-screw mechanism &mdash;
-            across separate flight and logic power rails with a black-powder
-            ejection charge and a remove-before-flight arming interlock.
+            Designed the payload computer for an autonomous soil-sampling system
+            flown on a high-power rocket for NASA's University Student Launch
+            Initiative. I laid out and debugged the custom circuit in KiCad and
+            built an ESP32-based avionics stack &mdash; integrating a barometric
+            altimeter, a soil conductivity sensor, a motor driver, and SD-card
+            data logging &mdash; all under tight space and weight constraints and
+            rated to survive launch, flight, and landing loads.
           </p>
           <p class="card-desc">
-            Every subsystem was captured in formal design documentation and
-            wiring schematics submitted to NASA through the program's review
-            milestones. From there I moved into rigorous bench and field testing
-            &mdash; validating the sensor stack, deployment sequence, and recovery
-            &mdash; before competing at the USLI launch, where the payload flew,
-            logged its full mission, and was recovered intact.
+            The flight firmware autonomously detects deployment and landing, then
+            drives a lead-screw excavator to collect a soil sample and measure its
+            conductivity, logging the full mission to SD. Every subsystem was
+            documented in schematics and design reports submitted to NASA through
+            the review milestones; from there I ran board bring-up and repeated
+            ground and flight tests before competing at the USLI launch.
           </p>
           <ul class="tags">
-            <li>ESP32</li><li>Altimeter</li><li>SD Logging</li><li>Relay + Gearmotor</li><li>3D Printing</li><li>High-Power Rocketry</li>
+            <li>KiCad</li><li>ESP32</li><li>Altimeter</li><li>Conductivity Sensor</li><li>SD Logging</li><li>Motor Driver</li><li>High-Power Rocketry</li>
           </ul>
           <div class="card-links">
-            <a href="#" target="_blank" rel="noopener">Write-up ↗</a>
-            <a href="#" target="_blank" rel="noopener">Code ↗</a>
+            <a href="https://github.com/carnegie-mellon-rocket-command/payload-hw26-usli" target="_blank" rel="noopener">CAD ↗</a>
+            <a href="assets/payload-frr-excerpt.pdf" target="_blank" rel="noopener">NASA FRR (payload) ↗</a>
           </div>
         </div>
       </article>
     </section>
 
     <section class="project" data-side="right">
-      <div class="node" aria-hidden="true">
-        <span class="node-led"></span>
-      </div>
+      <div class="node" aria-hidden="true"><span class="node-led"></span></div>
       <article class="card">
         <div class="card-media">
           <img class="main-img" src="assets/project-2.svg" alt="Screenshot of Project Two" loading="lazy" />
@@ -152,12 +141,20 @@
       <nav class="links" aria-label="Footer links">
         <a class="chip-link" href="assets/resume.pdf" target="_blank" rel="noopener"><span class="dot"></span> Résumé</a>
         <a class="chip-link" href="https://github.com/omnath132" target="_blank" rel="noopener"><span class="dot"></span> GitHub</a>
-        <a class="chip-link" href="https://www.linkedin.com/in/your-handle" target="_blank" rel="noopener"><span class="dot"></span> LinkedIn</a>
+        <a class="chip-link" href="https://www.linkedin.com/in/simon-kaplinsky/" target="_blank" rel="noopener"><span class="dot"></span> LinkedIn</a>
         <a class="chip-link" href="mailto:skaplins@andrew.cmu.edu"><span class="dot"></span> Email</a>
       </nav>
-      <p class="copyright">© <span id="year"></span> Your Name · Built on a circuit board.</p>
+      <p class="copyright">© <span id="year"></span> Simon Kaplinsky</p>
     </div>
   </footer>
+
+  <!-- lightbox: click any photo to view it full-size -->
+  <div class="lightbox" id="lightbox" hidden>
+    <button class="lb-close" aria-label="Close (Esc)">✕</button>
+    <button class="lb-nav lb-prev" aria-label="Previous image">‹</button>
+    <button class="lb-nav lb-next" aria-label="Next image">›</button>
+    <div class="lb-scroll"><img class="lb-img" alt="" /></div>
+  </div>
 
   <script src="js/main.js"></script>
 </body>
