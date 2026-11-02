@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/styles.css?v=12" />
+  <link rel="stylesheet" href="css/styles.css?v=13" />
 </head>
 <body>
   <!-- PCB-style background: fine grid + via dots, fixed behind all content -->
@@ -51,7 +51,34 @@
     <div class="rail-line" aria-hidden="true"><span class="rail-fill"></span></div>
 
     <!-- ---------- PROJECT (duplicate a block like this to add more) ---------- -->
-    <section class="project" data-side="left">
+    <section class="project costume-project" id="costume" data-side="left">
+      <div class="node" aria-hidden="true"><span class="node-led"></span></div>
+      <article class="card">
+        <div class="costume-lead">
+          <div class="card-body">
+            <p class="card-index">01 / LATEST PROJECT</p>
+            <p class="kicker"><span class="led"></span> COMPLETED</p>
+            <h2>Interactive Wearable Costume</h2>
+            <p class="card-role">Personal Project · 2026</p>
+            <p class="card-desc">A wearable light show, built from the wiring up. I designed and hand-soldered an ESP32-based costume with addressable LEDs along the arms, legs, and spine, copper touch pads on the sleeves, and a red infinity-mirror chest piece.</p>
+            <p class="card-desc">Custom firmware connects the sensors, lighting effects, and a browser-based control panel. The interface lets me adjust each section, choose colors and animations, and paint directly onto a live visualization of the costume.</p>
+            <ul class="tags"><li>ESP32</li><li>Addressable LEDs</li><li>Capacitive Touch</li><li>Motion Sensors</li><li>Embedded Web UI</li><li>Hand-Soldered</li></ul>
+            <div class="card-links"><a href="costume-control.html">Try the control demo ↗</a><a href="https://github.com/omnath132/interactive-wearable-costume" target="_blank" rel="noopener">Code ↗</a></div>
+          </div>
+          <figure class="finished-video"><video controls playsinline loop preload="metadata" poster="assets/costume-finished.jpg"><source src="assets/costume-finished.mp4" type="video/mp4" /></video><figcaption>The finished wearable</figcaption></figure>
+        </div>
+        <div class="costume-detail">
+          <div class="showcase-heading"><p class="card-index">HARDWARE IN ACTION</p><h3>Touch, movement, and light.</h3><p>See the sleeves, legs, and mirrored chest piece working on the build.</p></div>
+          <div class="costume-clips"><figure><video controls playsinline preload="none" poster="assets/costume-touch-demo.jpg"><source src="assets/costume-touch-demo.mp4" type="video/mp4" /></video><figcaption><strong>Touch-responsive sleeve</strong><span>Copper electrodes trigger blue light along the arm.</span></figcaption></figure><figure><video controls playsinline preload="none" poster="assets/costume-leg-demo.jpg"><source src="assets/costume-leg-demo.mp4" type="video/mp4" /></video><figcaption><strong>Leg lighting</strong><span>A closer look at the LEDs integrated into the legs.</span></figcaption></figure><figure><video controls playsinline preload="none" poster="assets/costume-walking-demo.jpg"><source src="assets/costume-walking-demo.mp4" type="video/mp4" /></video><figcaption><strong>Legs in motion</strong><span>The wearable’s leg lighting in motion.</span></figcaption></figure><figure><video controls playsinline preload="none" poster="assets/costume-heart-demo.jpg"><source src="assets/costume-heart-demo.mp4" type="video/mp4" /></video><figcaption><strong>Infinity-mirror heart</strong><span>The red chest piece pulsing on the assembled costume.</span></figcaption></figure><figure><video controls playsinline preload="none" poster="assets/costume-mirror-demo.jpg"><source src="assets/costume-mirror-demo.mp4" type="video/mp4" /></video><figcaption><strong>Inside the chest piece</strong><span>A closer view of the red infinity-mirror assembly.</span></figcaption></figure></div>
+          <div class="control-showcase"><div><p class="card-index">THE CONTROL WEBSITE</p><h3>A control panel for the whole costume.</h3><p>Six lighting sections, individual overrides, Paint and Fade brushes, and one-shot effects in a browser. The interactive demo uses simulated inputs so you can explore the controls.</p><a class="chip-link" href="costume-control.html"><span class="dot"></span> Open interactive demo ↗</a></div><a class="control-image" href="costume-control.html" aria-label="Try the costume control website"><img src="assets/costume-control.jpg" alt="Costume control website with a body-shaped LED visualization, section settings, and paint controls" loading="lazy" /></a></div>
+          <div class="showcase-heading"><p class="card-index">BUILD DETAILS</p><h3>Under the fabric.</h3></div>
+          <div class="card-media"><img class="main-img" src="assets/costume-assembled.jpg" alt="Assembled costume with wired sleeves, copper touch pads, and mirrored chest piece" loading="lazy" /></div>
+          <div class="gallery" role="group" aria-label="Costume build gallery"><button class="thumb is-active" type="button"><img src="assets/costume-assembled.jpg" alt="Assembled costume with wired sleeves, copper touch pads, and mirrored chest piece" loading="lazy" /></button><button class="thumb" type="button"><img src="assets/costume-touch-pads.jpg" alt="Copper-foil touch electrodes attached along a sleeve" loading="lazy" /></button><button class="thumb" type="button"><img src="assets/costume-touch-lit.jpg" alt="Copper touch pads alongside an illuminated LED strip" loading="lazy" /></button><button class="thumb" type="button"><img src="assets/costume-protoboard.jpg" alt="Hand-soldered electronics for the costume" loading="lazy" /></button><button class="thumb" type="button"><img src="assets/costume-sleeving.jpg" alt="Braided sleeving protecting the wiring harness" loading="lazy" /></button></div>
+        </div>
+      </article>
+    </section>
+
+    <section class="project" data-side="right">
       <div class="node" aria-hidden="true"><span class="node-led"></span></div>
       <article class="card">
         <div class="card-media">
@@ -78,7 +105,7 @@
           </button>
         </div>
         <div class="card-body">
-          <p class="card-index">01</p>
+          <p class="card-index">02</p>
           <h2>Autonomous Soil-Sampling Payload</h2>
           <p class="card-role">Electrical Team · CMU Rocket Command · NASA USLI 2025&ndash;26 (Project CANTALOUPE)</p>
           <p class="card-desc">
@@ -104,66 +131,6 @@
           <div class="card-links">
             <a href="https://github.com/carnegie-mellon-rocket-command/payload-hw26-usli" target="_blank" rel="noopener">CAD ↗</a>
             <a href="assets/payload-frr-excerpt.pdf" target="_blank" rel="noopener">NASA FRR (payload) ↗</a>
-          </div>
-        </div>
-      </article>
-    </section>
-
-    <section class="project" data-side="right">
-      <div class="node" aria-hidden="true"><span class="node-led"></span></div>
-      <article class="card">
-        <div class="card-video">
-          <video controls playsinline preload="none" poster="assets/costume-led-green.jpg">
-            <source src="assets/costume-glow.mp4" type="video/mp4" />
-          </video>
-        </div>
-        <div class="card-media">
-          <img class="main-img" src="assets/costume-fiber-blue.jpg"
-               alt="Fiber-optic strands glowing blue, gathered by hand for the costume's light diffusion"
-               loading="lazy" />
-        </div>
-        <div class="gallery" role="group" aria-label="Project gallery">
-          <button class="thumb is-active" type="button">
-            <img src="assets/costume-fiber-blue.jpg" alt="Fiber-optic strands glowing blue, gathered by hand" loading="lazy" />
-          </button>
-          <button class="thumb" type="button">
-            <img src="assets/costume-led-green.jpg" alt="Addressable LED strip glowing green, feeding a fiber-optic strand" loading="lazy" />
-          </button>
-          <button class="thumb" type="button">
-            <img src="assets/costume-workbench.jpg" alt="Build workbench: breadboard, soldering station, and dev tools" loading="lazy" />
-          </button>
-          <button class="thumb" type="button">
-            <img src="assets/costume-sensor-boards.jpg" alt="MPU6050 and MAX30102 sensor breakout boards wired for the costume" loading="lazy" />
-          </button>
-          <button class="thumb" type="button">
-            <img src="assets/costume-protoboard.jpg" alt="Hand-soldered protoboard for the sensor-to-LED signal chain" loading="lazy" />
-          </button>
-          <button class="thumb" type="button">
-            <img src="assets/costume-connector.jpg" alt="4-pin JST connector wired for a sensor module" loading="lazy" />
-          </button>
-          <button class="thumb" type="button">
-            <img src="assets/costume-sleeving.jpg" alt="Wiring harness finished with braided split-sleeving" loading="lazy" />
-          </button>
-        </div>
-        <div class="card-body">
-          <p class="card-index">02</p>
-          <p class="kicker kicker-amber"><span class="led led-amber"></span> WORK IN PROGRESS</p>
-          <h2>Interactive Wearable Costume</h2>
-          <p class="card-role">Personal Project · Jan 2026&ndash;Present · not yet complete</p>
-          <p class="card-desc">
-            A hand-wired, hand-soldered wearable that reacts to the body in real
-            time, currently under active construction. I'm designing a full
-            sensor-to-actuator signal chain &mdash; mapping heart rate,
-            gyroscope, and capacitive touch input into live control signals for
-            addressable LED drivers &mdash; and writing the firmware that turns
-            raw sensor data into responsive light. The photos and video below
-            are from the bring-up bench, not a finished build.
-          </p>
-          <ul class="tags">
-            <li class="tag-wip">WIP</li><li>Addressable LEDs</li><li>Sensor Fusion</li><li>Capacitive Touch</li><li>Firmware</li><li>Hand-Soldered</li>
-          </ul>
-          <div class="card-links">
-            <a href="https://github.com/omnath132/interactive-wearable-costume" target="_blank" rel="noopener">Code ↗</a>
           </div>
         </div>
       </article>
